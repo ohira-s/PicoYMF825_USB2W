@@ -25,6 +25,7 @@
 #
 #     0.0.3: 04/21/2025
 #            Sound file filter.
+#            Algorithm chart.
 #            LED signs for assistancing user.
 #
 # SPI:: YMF825
@@ -480,7 +481,81 @@ class OLED_SH1107_128x128_class:
 ###################################
 class YMF825_class:
     PARM_TEXT_OFF_ON = ["OFF", "ON "]
-    PARM_TEXT_ALGO = ["0|<1>*2", "1|<1>+2", "2|<1>+2+<3>+4", "3|(<1>+2*3)*4", "4|<1>*2*3*4", "5|<1>*2+<3>*4", "6|<1>+2*3*4", "7|<1>+2*3+4"]
+    PARM_TEXT_ALGO = [" 0|<1>*2", " 1|<1>+2", " 2|<1>+2+<3>+4", " 3|(<1>+2*3)*4", " 4|<1>*2*3*4", " 5|<1>*2+<3>*4", " 6|<1>+2*3*4", " 7|<1>+2*3+4"]
+    ALOGOLITHM = [
+        [	# 0|<1>*2
+            '',
+            '',
+            '',
+            '<1>-->2-->',
+            '',
+            '',
+            ''
+        ],
+        [	# 1|<1>+2
+            '',
+            '',
+            '<1>--',
+            '     +-->',
+            ' 2---',
+            '',
+            ''
+        ],
+        [	# 2|<1>+2+<3>+4
+            '<1>--',
+            '     +',
+            ' 2---',
+            '     +-->',
+            '<3>--',
+            '     +',
+            ' 4---'
+        ],
+        [	# 3|(<1>+2*3)*4
+            '',
+            '',
+            '<1>-----',
+            '        +-->4',
+            ' 2-->3--',
+            '',
+            ''
+        ],
+        [	# 4|<1>*2*3*4
+            '',
+            '',
+            '',
+            '<1>-->2-->3-->4',
+            '',
+            '',
+            ''
+        ],
+        [	# 5|<1>*2+<3>*4
+            '',
+            '',
+            '<1>-->2--',
+            '         +-->',
+            '<3>-->4--',
+            '',
+            ''
+        ],
+        [	# 6|<1>+2*3*4
+            '',
+            '<1>---------',
+            '            +-->',
+            ' 2-->3-->4--',
+            '',
+            '',
+            ''
+        ],
+        [	# 7|<1>+2*3+4"]
+            '',
+            '<1>-----',
+            '        +',
+            ' 2-->3--+-->',
+            '        +',
+            ' 4------',
+            ''
+        ]
+    ]
     PARM_TEXT_WAVE = [
         "SIN",     "plusSIN", "asbSIN",  "SAIL*2",
         "SIN2x",   "absSN2x", "SQUARE",  "RIBBON",
@@ -955,7 +1030,7 @@ class YMF825_class:
                                     sound_name = parm['value']
 #                                    print('SOUND NAME:', filenum, sound_name, name, sound_name.find(name))
                                     if len(name) <= 3 or sound_name.find(name) >= 0:
-                                        self.sound_files[filenum] = self.sound_files[filenum] + ':' + sound_name
+                                        self.sound_files[filenum] = self.sound_files[filenum] + sound_name
                                         
                             f.close()
 
@@ -1406,6 +1481,15 @@ class Application_class:
                 Application_class.DISPLAY_TEXTS[5 + col][1] = YMF825_obj.get_value_to_display(target, parameter, operator, True)
                 Application_class.DISPLAY_LABELS[5 + col][1].text = Application_class.DISPLAY_TEXTS[5 + col][1]
 
+    def show_algorithm_chart(self, row):
+        for col in list(range(5)):
+            Application_class.DISPLAY_TEXTS[row][col] = ''
+            Application_class.DISPLAY_LABELS[row][col].text = Application_class.DISPLAY_TEXTS[row][col]
+
+        algo = YMF825_obj.get_value('GENERAL', 'ALGO')['value']
+        Application_class.DISPLAY_TEXTS[row][1] = YMF825_class.ALOGOLITHM[algo][row-4]
+        Application_class.DISPLAY_LABELS[row][1].text = Application_class.DISPLAY_TEXTS[row][1]
+
     # Change the current page to edit
     def change_page(self):
         # Page format
@@ -1457,9 +1541,7 @@ class Application_class:
 
                 # Blank line
                 else:
-                    for col in list(range(5)):
-                        Application_class.DISPLAY_TEXTS[row][col] = ''
-                        Application_class.DISPLAY_LABELS[row][col].text = Application_class.DISPLAY_TEXTS[row][col]
+                    self.show_algorithm_chart(row)                        
 
         # OPERATORS parameter's page
         elif target == 'OPERATORS':
@@ -1593,6 +1675,7 @@ class Application_class:
         parm_unit = disp_frmt['unit']
 
         # Editor control
+        algorithm_edited = False
         equalizer_edited = False
         for rotary in list(range(7)):
             if M5Stack_8Encoder_class.status['on_change']['rotary_inc'][rotary]:
@@ -1605,6 +1688,9 @@ class Application_class:
                     YMF825_obj.increment_parameter_value(inc, target, parm_name, parm_unit)
                     self.show_parameter(target, parm_name, parm_unit)
                     
+                    if target == 'GENERAL' and parm_name == 'ALGO':
+                        algorithm_edited = True
+
                     if target == 'EQUALIZERS' and (parm_name == 'FREQ' or parm_name == 'Qfct'):
                         equalizer_edited = True
 
@@ -1622,6 +1708,10 @@ class Application_class:
         if target == 'GENERAL' or target == 'OPERATORS':
             YMF825_obj.send_edited_sound_param()
             
+            if algorithm_edited:
+                for row in list(range(4,11)):
+                    self.show_algorithm_chart(row)
+
         elif target == 'EQUALIZERS':
             if equalizer_edited:
                 YMF825_obj.send_equalizer_parameters(parm_unit)
