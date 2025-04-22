@@ -55,7 +55,7 @@
 #   D+ : GP26(31)
 #   D- : GP27(32)
 ############################################################################
-import microcontroller		# CPU clock up
+#import microcontroller		# CPU clock up
 
 import asyncio
 #import keypad
@@ -180,9 +180,9 @@ class MIDI_class:
         h = usb_host.Port(usb_midi_host_port[0], usb_midi_host_port[1])
 
         if supervisor.runtime.usb_connected:
-            print("USB<host>!")
+            print('USB<host>!')
         else:
-            print("!USB<host>")
+            print('!USB<host>')
 
     # Is host mode or not
     def as_host(self):
@@ -194,7 +194,7 @@ class MIDI_class:
         self._usb_midi_host = None
 
         if self._init:
-            print("Looking for midi device")
+            print('Looking for midi device')
 
         try_count = 5000
 #        while self._raw_midi_host is None and try_count > 0:
@@ -215,13 +215,13 @@ class MIDI_class:
                 
                 try:
                     if self._init:
-                        print("Found", hex(device.idVendor), hex(device.idProduct))
+                        print('Found', hex(device.idVendor), hex(device.idProduct))
 
 #                    self._raw_midi_host = MIDI(device)				# bloking mode
                     self._raw_midi_host = MIDI(device, 0.05)		# none-blocking mode
 #                    self._raw_midi_host = MIDI(device, 0.1)		# none-blocking mode
                     if self._init:
-                        print("CONNECT MIDI")
+                        print('CONNECT MIDI')
 
                 except ValueError:
                     self._raw_midi_host = None
@@ -294,7 +294,7 @@ class M5Stack_8Encoder_class:
         devices = []
         while dev_hex not in devices:
             devices = [hex(device_address) for device_address in self._i2c.scan()]
-            print("I2C addresses found:", devices)
+            print('I2C addresses found:', devices)
             sleep(0.5)
 
         print('Found 8Encoder.')
@@ -394,7 +394,7 @@ class OLED_SH1107_128x128_class:
         devices = []
         while dev_hex not in devices:
             devices = [hex(device_address) for device_address in self._i2c.scan()]
-            print("I2C addresses found:", devices)
+            print('I2C addresses found:', devices)
             sleep(0.5)
 
         self._display_bus = I2CDisplayBus(self._i2c, device_address=self._i2c_address)
@@ -431,23 +431,23 @@ class OLED_SH1107_128x128_class:
 #        splash.append(small_square)
 
         # Draw some label text3
-##        text3 = "YMF825 USB MIDI HOST"  # overly long to see where it clips
+##        text3 = 'YMF825 USB MIDI HOST'  # overly long to see where it clips
 ##        text_area3 = self.new_label(text3, 0, 0)
 ##        self._screen.append(text_area3)
 
         # Draw some label text1
-##        text1 = "CIRCUIT PYTHON567"  # overly long to see where it clips
+##        text1 = 'CIRCUIT PYTHON567'  # overly long to see where it clips
 ##        text_area1 = self.new_label(text1, 1, 1)
 ##        self._screen.append(text_area1)
 
         # Draw some label text4
-##        text4 = "01234567890123456789012"  # overly long to see where it clips
+##        text4 = '01234567890123456789012'  # overly long to see where it clips
 ##        text_area4 = self.new_label(text4, 0, 2)
 ##        self._screen.append(text_area4)
         
         # Draw text lines
 ##        for t in list(range(3, 11)):
-##            text_line = "L" + str(t)
+##            text_line = 'L' + str(t)
 ##            self._screen.append(self.new_label(text_line, 0, t))
  
         # Draw the status bar on bottom
@@ -484,8 +484,14 @@ class OLED_SH1107_128x128_class:
 # CLASS: YMF825 FM Synthesizer
 ###################################
 class YMF825_class:
-    PARM_TEXT_OFF_ON = ["OFF", "ON "]
-    PARM_TEXT_ALGO = [" 0:<1>*2", " 1:<1>+2", " 2:<1>+2+<3>+4", " 3:(<1>+2*3)*4", " 4:<1>*2*3*4", " 5:<1>*2+<3>*4", " 6:<1>+2*3*4", " 7:<1>+2*3+4"]
+    GENERAL = 'GENERAL'
+    OPERATORS = 'OPERATORS'
+    EQUALIZERS = 'EQUALIZERS'
+    SAVE = 'SAVE'
+    LOAD = 'LOAD'
+
+    PARM_TEXT_OFF_ON = ['OFF', 'ON ']
+    PARM_TEXT_ALGO = [' 0:<1>*2', ' 1:<1>+2', ' 2:<1>+2+<3>+4', ' 3:(<1>+2*3)*4', ' 4:<1>*2*3*4', ' 5:<1>*2+<3>*4', ' 6:<1>+2*3*4', ' 7:<1>+2*3+4']
     ALOGOLITHM = [
         [	# 0|<1>*2
             '',
@@ -550,7 +556,7 @@ class YMF825_class:
             '',
             ''
         ],
-        [	# 7|<1>+2*3+4"]
+        [	# 7|<1>+2*3+4']
             '',
             '<1>-----',
             '        +',
@@ -561,81 +567,81 @@ class YMF825_class:
         ]
     ]
     PARM_TEXT_WAVE = [
-        "SIN",     "plusSIN", "asbSIN",  "SAIL*2",
-        "SIN2x",   "absSN2x", "SQUARE",  "RIBBON",
-        "SINcomp", "plusScp", "absScmp", "SAILcmp",
-        "SIN2xCp", "plsS2cp", "plusSQR", "-------",
-        "TRIANGL", "plusTRI", "absTRIA", "absTRIh",
-        "TRIAN2x", "plsTR2x", "plsSQR2", "-----",
-        "SAW",     "plusSAW", "absSAW",  "absSAWc",
-        "SAW2x",   "absSAW2", "SQUAR/4", "-------"
+        'SIN(t)',     'plus(SIN(t))', 'abs(SIN(t))',  'SAIL(t)*2',
+        'SIN(2t)',   'abs(SIN(2t))', 'SQUARE(t)',  'RIBBON(t)',
+        'compress(SIN(t))', 'plus(comp(SIN(t)))', 'abs(comp(SIN(t)))', 'comp(SAIL(t))',
+        'comp(SIN(2t))', 'plus(SIN(2t))', 'plus(SQUARE(t))', '---',
+        'TRIANGLE(t)', 'plus(TRIANGLE(t))', 'absTRIANGLE(t)', 'absTRIh',
+        'TRIANGLE(2t)', 'pls(TRIANGLE(2t))', 'plus(SQUARE(2t))', '---',
+        'SAW(t)',     'plus(SAW(t))', 'abs(SAW(t))',  'abs(comp(SAW(t)))',
+        'SAW(2t)',   'abs(SAW(2t))', 'SQUARE(t)/4', '---'
     ]
     PARM_TEXT_EQTYPE = ['ALL PASS', 'LPF', 'HPF', 'BPF:skart', 'BPF:0db', 'NOTCH']
-    PARM_TEXT_SAVE = ['----', 'Sure?', 'SAVE', 'Sure?']
+    PARM_TEXT_SAVE = ['----', 'Save?', 'SAVE', 'Save?']
     PARM_TEXT_LOAD = ['----', 'Load?', 'LOAD', 'Load?', 'SEARCH', 'Search?']
     PARM_TEXT_CURSOR_F = ['^', ' ^', '   ^', '    ^', '     ^', '      ^']
     PARM_TEXT_CURSOR_T = ['^', ' ^', '  ^', '   ^', '    ^', '     ^', '      ^', '       ^']
     
     YMF825_PARM = {
-        'GENERAL': [
+        GENERAL: [
             # Editor Page1
             # name, value_range 0..4-1, text_conversion, data_value
             # param_bytes[ 2]: NOP 000000 | Basic Octave 11
-            {'name': "OCTV", 'max': 4, 'val_conv': '{:2d}',              'value': 1,             'parm_pos': 0, 'val_mask': 0x03, 'shift': 0, 'mask': 0x00},
+            {'name': 'OCTV', 'max': 4, 'val_conv': '{:2d}',        'value': 1, 'parm_pos': 0, 'val_mask': 0x03, 'shift': 0, 'mask': 0x00},
             # param_bytes[ 3]:LFO 11 | NOP 000 | Algorithm 111
-            {'name': "ALGO", 'max': 8, 'val_conv': PARM_TEXT_ALGO,    'value': 0,             'parm_pos': 1, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
-            {'name': "LFO ", 'max': 8, 'val_conv': '{:2d}',              'value': 2,             'parm_pos': 1, 'val_mask': 0x03, 'shift': 6, 'mask': 0x07}
+            {'name': 'ALGO', 'max': 8, 'val_conv': PARM_TEXT_ALGO, 'value': 0, 'parm_pos': 1, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
+            {'name': 'LFO ', 'max': 8, 'val_conv': '{:2d}',        'value': 2, 'parm_pos': 1, 'val_mask': 0x03, 'shift': 6, 'mask': 0x07}
         ],
         
         # 4 OPERATORs
-        'OPERATORS': [
+        OPERATORS: [
             # name, value_range 0..4-1, text_conversion, data_value[0..3]
             
             # Editor Page2
-            {'name': "WAVE", 'max': 32, 'val_conv': PARM_TEXT_WAVE,   'value': [ 0, 0, 0, 0], 'parm_pos':  8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
-            {'name': "FREQ", 'max': 16, 'val_conv': None,             'value': [ 2, 4, 4, 4], 'parm_pos':  7, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
-            {'name': "DETU", 'max':  8, 'val_conv': None,             'value': [ 3, 0, 0, 0], 'parm_pos':  7, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': "LEVL", 'max': 32, 'val_conv': None,             'value': [ 4, 0,31,31], 'parm_pos':  5, 'val_mask': 0x3f, 'shift': 2, 'mask': 0x03},
-            {'name': "FDBK", 'max':  8, 'val_conv': None,             'value': [ 3, 0, 0, 0], 'parm_pos':  8, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
+            {'name': 'WAVE', 'max': 32, 'val_conv': PARM_TEXT_WAVE,   'value': [ 0, 0, 0, 0], 'parm_pos':  8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
+            {'name': 'FREQ', 'max': 16, 'val_conv': None,             'value': [ 2, 4, 4, 4], 'parm_pos':  7, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': 'DETU', 'max':  8, 'val_conv': None,             'value': [ 3, 0, 0, 0], 'parm_pos':  7, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
+            {'name': 'LEVL', 'max': 32, 'val_conv': None,             'value': [ 4, 0,31,31], 'parm_pos':  5, 'val_mask': 0x3f, 'shift': 2, 'mask': 0x03},
+            {'name': 'FDBK', 'max':  8, 'val_conv': None,             'value': [ 3, 0, 0, 0], 'parm_pos':  8, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
 
             # Editor Page3
-            {'name': "ATCK", 'max': 16, 'val_conv': None,             'value': [14,14,14,14], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
-            {'name': "DECY", 'max': 16, 'val_conv': None,             'value': [ 4, 4, 4, 4], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': "SUSL", 'max': 16, 'val_conv': None,             'value': [12,12,12,12], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': "SUSR", 'max': 16, 'val_conv': None,             'value': [ 7, 7, 7, 7], 'parm_pos':  2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
-            {'name': "RELS", 'max': 16, 'val_conv': None,             'value': [ 5, 5, 5, 5], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': 'ATCK', 'max': 16, 'val_conv': None,             'value': [14,14,14,14], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': 'DECY', 'max': 16, 'val_conv': None,             'value': [ 4, 4, 4, 4], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
+            {'name': 'SUSL', 'max': 16, 'val_conv': None,             'value': [12,12,12,12], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
+            {'name': 'SUSR', 'max': 16, 'val_conv': None,             'value': [ 7, 7, 7, 7], 'parm_pos':  2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': 'RELS', 'max': 16, 'val_conv': None,             'value': [ 5, 5, 5, 5], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
 
             # Editor Page4
-            {'name': "VIBE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 0, 'mask': 0xfe},
-            {'name': "VIBD", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 1, 'mask': 0xf1},
-            {'name': "AMPE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 4, 'mask': 0xef},
-            {'name': "AMPM", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 5, 'mask': 0x1f},
-            {'name': "KYSE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  5, 'val_mask': 0x03, 'shift': 0, 'mask': 0xfc},
-            {'name': "KSLV", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  2, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
-            {'name': "IGOF", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 1, 1, 1, 1], 'parm_pos':  2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
+            {'name': 'VIBE', 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 0, 'mask': 0xfe},
+            {'name': 'VIBD', 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 1, 'mask': 0xf1},
+            {'name': 'AMPE', 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 4, 'mask': 0xef},
+            {'name': 'AMPM', 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 5, 'mask': 0x1f},
+            {'name': 'KYSE', 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  5, 'val_mask': 0x03, 'shift': 0, 'mask': 0xfc},
+            {'name': 'KSLV', 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  2, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
+            {'name': 'IGOF', 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 1, 1, 1, 1], 'parm_pos':  2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
         ],
         
-        'EQUALIZERS': [
-            {'name': "TYPE", 'max':  6, 'val_conv': PARM_TEXT_EQTYPE,   'value': [    0,     0,     0], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
-            {'name': "FREQ", 'max': 48, 'val_conv': '{: =7.4f}',        'value': [4.096, 2.048, 8.000], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
-            {'name': "Qfct", 'max': 10, 'val_conv': '{: =7.4f}',        'value': [0.100, 0.540, 2.340], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
-            {'name': "NPOS", 'max':  6, 'val_conv': PARM_TEXT_CURSOR_F, 'value': [    1,     1,     1], 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
+        EQUALIZERS: [
+            {'name': 'TYPE', 'max':  6, 'val_conv': PARM_TEXT_EQTYPE,   'value': [    0,     0,     0], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
+            {'name': 'FREQ', 'max': 48, 'val_conv': '{: =7.4f}',        'value': [4.096, 2.048, 8.000], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
+            {'name': 'Qfct', 'max': 10, 'val_conv': '{: =7.4f}',        'value': [0.100, 0.540, 2.340], 'parm_pos': 8, 'val_mask': 0x1f, 'shift': 3, 'mask': 0x07},
+            {'name': 'NPOS', 'max':  6, 'val_conv': PARM_TEXT_CURSOR_F, 'value': [    1,     1,     1], 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
         ],
         
-        'SAVE': [
-            {'name': "BANK", 'max':   10, 'val_conv': '{:3d}',            'value':          9, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NUM.", 'max': 1000, 'val_conv': '{:03d}',           'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NAME", 'max':    8, 'val_conv': '{:s}',             'value': '        ', 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NPOS", 'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "SAVE", 'max':    4, 'val_conv': PARM_TEXT_SAVE,     'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
+        SAVE: [
+            {'name': 'BANK', 'max':   10, 'val_conv': '{:3d}',            'value':          9, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NUM.', 'max': 1000, 'val_conv': '{:03d} {:s}',      'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NAME', 'max':    8, 'val_conv': '{:s}',             'value': '        ', 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NPOS', 'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'SAVE', 'max':    4, 'val_conv': PARM_TEXT_SAVE,     'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
         ],
         
-        'LOAD': [
-            {'name': "BANK", 'max':   10, 'val_conv': '{:3d}',            'value':          9, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NUM.", 'max': 1000, 'val_conv': '{:s}',             'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NAME", 'max':    8, 'val_conv': '{:s}',             'value': '        ', 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "NPOS", 'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': "LOAD", 'max':    6, 'val_conv': PARM_TEXT_LOAD,     'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
+        LOAD: [
+            {'name': 'BANK', 'max':   10, 'val_conv': '{:3d}',            'value':          9, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NUM.', 'max': 1000, 'val_conv': '{:s}',             'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NAME', 'max':    8, 'val_conv': '{:s}',             'value': '        ', 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'NPOS', 'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': 'LOAD', 'max':    6, 'val_conv': PARM_TEXT_LOAD,     'value':          0, 'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
         ]
     }
 
@@ -696,14 +702,14 @@ class YMF825_class:
         
     # Reset YMF825
     def reset(self):
-        print("Reseting YMF825.")
+        print('Reseting YMF825.')
         self._PIN_RESET.value = True
         sleep(1.0)
         self._PIN_RESET.value = False
         sleep(1.0)
         self._PIN_RESET.value = True
         sleep(1.0)
-        print("Reset YMF825.")        
+        print('Reset YMF825.')        
 
     # Write byte array data to SPI for YMF825
     #   addr:: SPI register address
@@ -740,35 +746,40 @@ class YMF825_class:
     def get_value_to_display(self, target, parameter, operator=0, as_wave_name=False):
         var = None
         frm = None
-        if target == 'GENERAL':
+        if target == YMF825_class.GENERAL:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value']
                     frm = parm['val_conv']
                     break
             
-        elif target == 'OPERATORS':
+        elif target == YMF825_class.OPERATORS:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value'][operator]
                     frm = parm['val_conv']
                     break
             
-        elif target == 'EQUALIZERS':
+        elif target == YMF825_class.EQUALIZERS:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value'][operator]
                     frm = parm['val_conv']
                     break
 
-        elif target == 'SAVE' or target == 'LOAD':
+        elif target == YMF825_class.SAVE or target == YMF825_class.LOAD:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value']
                     frm = parm['val_conv']
+
+                    # Save file number with its sound name
+                    if target == YMF825_class.SAVE and parameter == 'NUM.':
+                        sound_name = self.get_sound_name_of_file(self.get_value(YMF825_class.SAVE, 'BANK')['value'], val)
+                        return frm.format(val, sound_name)
 
                     # Load file number
-                    if target == 'LOAD' and parameter == 'NUM.':
+                    if target == YMF825_class.LOAD and parameter == 'NUM.':
                         print('LOAD NUM.:', val, self.sound_files[val])
                         val = self.sound_files[val]
                         
@@ -799,14 +810,14 @@ class YMF825_class:
             else:
                 ret = '{:3d}'.format(val)
 
-            if target == 'OPERATORS' and operator < 3 and not as_wave_name:
+            if target == YMF825_class.OPERATORS and operator < 3 and not as_wave_name:
                 ret = ret + '|'
                 
             return ret
 
     def increment_parameter_value(self, inc, target, parameter, operator=0):
 #        print('INC_PARM:', inc, target, parameter, operator)
-        if   target == 'GENERAL':
+        if   target == YMF825_class.GENERAL:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value'] + inc
@@ -817,7 +828,7 @@ class YMF825_class:
                         
                     parm['value'] = val
             
-        elif target == 'OPERATORS':
+        elif target == YMF825_class.OPERATORS:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     val = parm['value'][operator] + inc
@@ -828,7 +839,7 @@ class YMF825_class:
                         
                     parm['value'][operator] = val
             
-        elif target == 'EQUALIZERS':
+        elif target == YMF825_class.EQUALIZERS:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     if   parameter == 'FREQ' or parameter == 'Qfct':
@@ -852,7 +863,7 @@ class YMF825_class:
                         
                     parm['value'][operator] = val
                     
-        elif target == 'SAVE' or target == 'LOAD':
+        elif target == YMF825_class.SAVE or target == YMF825_class.LOAD:
             for parm in YMF825_class.YMF825_PARM[target]:
                 if parm['name'] == parameter:
                     # Character data inc/dec
@@ -887,8 +898,8 @@ class YMF825_class:
                         
                         val = parm['value'][:pos] + val + parm['value'][pos+1:]
 
-                    # Find a next valid sound file
-                    elif target == 'LOAD' and parameter == 'NUM.':
+                    # Find a next valid sound file in LOAD
+                    elif target == YMF825_class.LOAD and parameter == 'NUM.':
                         start = parm['value']
                         val = start + inc
                         if val < 0:
@@ -908,6 +919,19 @@ class YMF825_class:
                             if val == start:
                                 break
 
+                    # Increment each digit in SAVE
+                    elif target == YMF825_class.SAVE and parameter == 'NUM.':
+                        # Digit position in the NUM.
+                        pos = self.get_value(target, 'NPOS')['value']
+                        if pos >= 3:
+                            pos = 2
+                            
+                        val = parm['value'] + inc * 10 ** (2 - pos)
+                        if val < 0:
+                            val = parm['max'] - 1
+                        elif val >= parm['max']:
+                            val = 0                       
+
                     # Default value inc/dec
                     else:
                         val = parm['value'] + inc
@@ -919,7 +943,7 @@ class YMF825_class:
                     parm['value'] = val
             
     def reverse_parameters(self, voice_params):
-        params = self.YMF825_PARM['GENERAL']
+        params = self.YMF825_PARM[YMF825_class.GENERAL]
         for prm in params:
             pos = prm['parm_pos']
             data_mask = prm['mask'] ^ 0xff
@@ -931,7 +955,7 @@ class YMF825_class:
             value = value & mask
             print('GENERAL:' + prm['name'] + ' = ' + str(value))
 
-        params = self.YMF825_PARM['OPERATORS']
+        params = self.YMF825_PARM[YMF825_class.OPERATORS]
         for opr in list(range(4)):
             for prm in params:
                 pos = prm['parm_pos']
@@ -948,18 +972,18 @@ class YMF825_class:
     def save_parameter_file(self):
         # Save keys
         file_data = []
-        for target in ['GENERAL', 'OPERATORS', 'EQUALIZERS', 'SAVE']:
+        for target in [YMF825_class.GENERAL, YMF825_class.OPERATORS, YMF825_class.EQUALIZERS, YMF825_class.SAVE]:
             for parm in YMF825_class.YMF825_PARM[target]:
                 print('save:', target, parm['name'], parm['value'])
                 file_data.append({'target': target, 'name': parm['name'], 'value': parm['value']})
 
-        parm = self.get_value('SAVE', 'BANK')
+        parm = self.get_value(YMF825_class.SAVE, 'BANK')
         if parm is None:
             return
         
         bank = parm['value']
         
-        parm = self.get_value('SAVE', 'NUM.')
+        parm = self.get_value(YMF825_class.SAVE, 'NUM.')
         if parm is None:
             return
         
@@ -973,13 +997,13 @@ class YMF825_class:
 
     # Load parameter file
     def load_parameter_file(self):
-        parm = self.get_value('LOAD', 'BANK')
+        parm = self.get_value(YMF825_class.LOAD, 'BANK')
         if parm is None:
             return
-        
+    
         bank = parm['value']
         
-        parm = self.get_value('LOAD', 'NUM.')
+        parm = self.get_value(YMF825_class.LOAD, 'NUM.')
         if parm is None:
             return
         
@@ -999,17 +1023,36 @@ class YMF825_class:
                 name = parm['name']
                 value = parm['value']
                 parameter = self.get_value(target, name)
-                parameter['value'] = 0 if target == 'SAVE' and name == 'SAVE' else value
+                parameter['value'] = 0 if target == YMF825_class.SAVE and name == YMF825_class.SAVE else value
                 
         except:
             success = False
         
         return success
 
+    # Load parameter file
+    def get_sound_name_of_file(self, bank, number):
+        sound_name = '<NEW FILE>'
+        try:
+            with open('SYNTH/SOUND/SNDP' + str(bank) + '{:03d}'.format(number) + '.json', 'r') as f:
+                file_data = json.load(f)
+                f.close()
+
+                if file_data is not None:
+                    for parm in file_data:
+                        if parm['target'] == YMF825_class.SAVE and parm['name'] == 'NAME':
+                            sound_name = parm['value']
+                            break
+                
+        except:
+            pass
+        
+        return sound_name
+
     # Find sound files in the current bank and search name
     def find_sound_files(self):
-        bank = self.get_value('LOAD', 'BANK')['value']
-        name = self.get_value('LOAD', 'NAME')['value']
+        bank = self.get_value(YMF825_class.LOAD, 'BANK')['value']
+        name = self.get_value(YMF825_class.LOAD, 'NAME')['value']
         name = name.strip()
 #        print('SEARCH:', bank, name)
         
@@ -1031,7 +1074,7 @@ class YMF825_class:
                         with open('SYNTH/SOUND/' + pf, 'r') as f:
                             file_data = json.load(f)
                             for parm in file_data:
-                                if parm['target'] == 'SAVE' and parm['name'] == 'NAME':
+                                if parm['target'] == YMF825_class.SAVE and parm['name'] == 'NAME':
                                     sound_name = parm['value']
 #                                    print('SOUND NAME:', filenum, sound_name, name, sound_name.find(name))
                                     if len(name) <= 3 or sound_name.find(name) >= 0:
@@ -1039,7 +1082,7 @@ class YMF825_class:
                                         
                             f.close()
 
-        parm = self.get_value('LOAD', 'NUM.')
+        parm = self.get_value(YMF825_class.LOAD, 'NUM.')
         parm['value'] = 0
         for filenum in list(range(1000)):
             if len(self.sound_files[filenum]) >= 5:
@@ -1070,7 +1113,7 @@ class YMF825_class:
     def send_edited_sound_param(self):
         # General Parameters: 30bytes
         sound_param = bytearray(30)
-        for param in YMF825_class.YMF825_PARM['GENERAL']:
+        for param in YMF825_class.YMF825_PARM[YMF825_class.GENERAL]:
             val        = param['value']
             byte_order = param['parm_pos']
             self_mask  = param['val_mask']
@@ -1080,7 +1123,7 @@ class YMF825_class:
 
         # Operators Parameters: OP1=[4]..[10] / OP2=[11]..[17] / OP3=[18]..[24] / OP4=[25]..[31]
         for opr in list(range(4)):
-            for param in YMF825_class.YMF825_PARM['OPERATORS']:
+            for param in YMF825_class.YMF825_PARM[YMF825_class.OPERATORS]:
                 val        = param['value'][opr]
                 byte_order = param['parm_pos'] + opr * 7
                 self_mask  = param['val_mask']
@@ -1152,7 +1195,7 @@ class YMF825_class:
 #        self.reverse_parameters(voice_params)
         
 #        self.spi_unlock()
-        print("YMF825 initialized.")
+        print('YMF825 initialized.')
 
     # Set Chanel
     def set_chanel(self):
@@ -1224,7 +1267,7 @@ class YMF825_class:
     # NOTICE:: Never call this directory, use play_by_scale() or play_by_timbre_scale().
     #   fnumh, fnuml:: 2byte data to play, byte data for a note is in notenum_hi[note] and notenum_lo[note].
     def _note_on(self, voice, notenum_h, notenum_l, velocity = 0x1c):
-#        print("_NOTE:", 'OFF' if velocity == 0 else 'ON ', voice, notenum_h, notenum_l, velocity)
+#        print('_NOTE:', 'OFF' if velocity == 0 else 'ON ', voice, notenum_h, notenum_l, velocity)
         # Send note on to YMF825
         # 0x40=Note ON / 0x00=Note OFF: b0NMEVVVV (N=Note ON/OFF, M=Mute, E=EG_REST, V=Voice)
         
@@ -1276,7 +1319,7 @@ class YMF825_class:
         if q_factor < 0.01:
             q_factor = 0.01
 
-    #    print("BIQUAD FILTER:{}, Fc={}, Q={}".format(flt_type, fc, qv))
+    #    print('BIQUAD FILTER:{}, Fc={}, Q={}'.format(flt_type, fc, qv))
         w0 = math.pi * 2 * cutoff_freq / 48.000
         alpha = math.sin(w0) / (q_factor + q_factor)
         cosw0 = math.cos(w0)
@@ -1316,7 +1359,7 @@ class YMF825_class:
             b2 = (1 + alpha) / a0
             
         else:
-    #        print("UNKNOWN FILTER TYPE.")
+    #        print('UNKNOWN FILTER TYPE.')
             return
 
         print('EQ:', filter_name, a0, a1, a2, b0, b1, b2)
@@ -1354,23 +1397,23 @@ class YMF825_class:
 
             carry = False
             if sign:
-#                print("SIGN BFR:", mantissa)
-                revs = ""
+#                print('SIGN BFR:', mantissa)
+                revs = ''
                 lman = len(mantissa)
                 for b in range(1,lman-1):
-                    if mantissa[-b] == "0":
-                        revs = "1" + revs
+                    if mantissa[-b] == '0':
+                        revs = '1' + revs
                         if b != lman-2:
                             revs = mantissa[2:lman-b] + revs
 
                         break
                     else:
-                        revs = "0" + revs
+                        revs = '0' + revs
                         if b == lman-2:
                             carry = True
 
-                mantissa = "0." + revs
-#                print("SIGN AFT:", mantissa, carry)
+                mantissa = '0.' + revs
+#                print('SIGN AFT:', mantissa, carry)
 
             return mantissa,carry,rb
 
@@ -1395,12 +1438,12 @@ class YMF825_class:
                 if carry:
                     ceq_int += 1
 
-#                print("EQUALIZER BITS and CARRY = INT:", mantissa, carry, "=", ceq_int)
+#                print('EQUALIZER BITS and CARRY = INT:', mantissa, carry, '=', ceq_int)
                 self.equalizer_ceq[ceq_num] = self.equalizer_ceq[ceq_num] | ( ceq_int << 4 )
-#                print("FRC:: CEQ INT SHIFT ARRAY FRAC=", ceq, ceq_int, ( ceq_int << 4 ), self.equalizer_ceq[ceq_num], ceq_frc)
+#                print('FRC:: CEQ INT SHIFT ARRAY FRAC=', ceq, ceq_int, ( ceq_int << 4 ), self.equalizer_ceq[ceq_num], ceq_frc)
                 for b in range(2,len( mantissa )):
-#                    print("BIT:", b, "=", mantissa[b])
-                    if mantissa[b] == "1":
+#                    print('BIT:', b, '=', mantissa[b])
+                    if mantissa[b] == '1':
                         if   b <=  5:       #  2.. 5
                             self.equalizer_ceq[ceq_num  ] = self.equalizer_ceq[ceq_num  ] | ( 0x01 << ( 5-b) )
                         elif b <= 13:       #  6..13
@@ -1413,13 +1456,13 @@ class YMF825_class:
                     ceq_int += 1
 
                 self.equalizer_ceq[ceq_num] = self.equalizer_ceq[ceq_num] | ( ceq_int << 4 )
-#                print("INT:: CEQ INT SHIFT ARRAY FRAC=", ceq, ceq_int, ( ceq_int << 4 ), self.equalizer_ceq[ceq_num], ceq_frc)
+#                print('INT:: CEQ INT SHIFT ARRAY FRAC=', ceq, ceq_int, ( ceq_int << 4 ), self.equalizer_ceq[ceq_num], ceq_frc)
 
-#            print("EQL::", self.equalizer_ceq[ceq_num], self.equalizer_ceq[ceq_num+1], self.equalizer_ceq[ceq_num+2])
+#            print('EQL::', self.equalizer_ceq[ceq_num], self.equalizer_ceq[ceq_num+1], self.equalizer_ceq[ceq_num+2])
 
         # Equalizer parameters buffer (address + 15bytes)
         self.equalizer_ceq = bytearray(16)
-        equalizer = YMF825_class.YMF825_PARM['EQUALIZERS']
+        equalizer = YMF825_class.YMF825_PARM[YMF825_class.EQUALIZERS]
         filter_params = self.calc_biquad_filter(equalizer[0]['value'][eqno], equalizer[1]['value'][eqno], equalizer[2]['value'][eqno])
         print('EQ', eqno, filter_params)
 
@@ -1435,7 +1478,7 @@ class YMF825_class:
         make_ceq_bytes(4, filter_params['a2'])
 
         #Burst write mode and all key notes off
-        print("EQUALIZER", eqno, ":", self.equalizer_ceq)
+        print('EQUALIZER', eqno, ':', self.equalizer_ceq)
         self.spi_write_byte(0x08, 0xF6)
         self.spi_write_byte(0x08, 0x00)
         self.spi_write(32 + eqno, self.equalizer_ceq)
@@ -1450,29 +1493,29 @@ class Application_class:
     DISPLAY_LABELS = []
     DISPLAY_PAGE = 0
     DISPLAY_PAGE_FORMAT = [
-        {'title': ['YMF825 GENERAL', '', '', '', '' ], 'target': 'GENERAL',    'range': ( 0, 2), 'unit': 0},
+        {'title': ['YMF825 GENERAL', '', '', '', '' ], 'target': YMF825_class.GENERAL,    'range': ( 0, 2), 'unit': 0},
 
-        {'title': ['OSCL:', '[1]', ' 2', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': ( 0, 4), 'unit': 0},
-        {'title': ['OSCL:', ' 1', '[2]', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': ( 0, 4), 'unit': 1},
-        {'title': ['OSCL:', ' 1', ' 2', '[3]', ' 4' ], 'target': 'OPERATORS',  'range': ( 0, 4), 'unit': 2},
-        {'title': ['OSCL:', ' 1', ' 2', ' 3', '[4]' ], 'target': 'OPERATORS',  'range': ( 0, 4), 'unit': 3},
+        {'title': ['OSCL:', '[1]', ' 2', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 0, 4), 'unit': 0},
+        {'title': ['OSCL:', ' 1', '[2]', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 0, 4), 'unit': 1},
+        {'title': ['OSCL:', ' 1', ' 2', '[3]', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 0, 4), 'unit': 2},
+        {'title': ['OSCL:', ' 1', ' 2', ' 3', '[4]' ], 'target': YMF825_class.OPERATORS,  'range': ( 0, 4), 'unit': 3},
         
-        {'title': ['ADSR:', '[1]', ' 2', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': ( 5, 9), 'unit': 0},
-        {'title': ['ADSR:', ' 1', '[2]', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': ( 5, 9), 'unit': 1},
-        {'title': ['ADSR:', ' 1', ' 2', '[3]', ' 4' ], 'target': 'OPERATORS',  'range': ( 5, 9), 'unit': 2},
-        {'title': ['ADSR:', ' 1', ' 2', ' 3', '[4]' ], 'target': 'OPERATORS',  'range': ( 5, 9), 'unit': 3},
+        {'title': ['ADSR:', '[1]', ' 2', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 5, 9), 'unit': 0},
+        {'title': ['ADSR:', ' 1', '[2]', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 5, 9), 'unit': 1},
+        {'title': ['ADSR:', ' 1', ' 2', '[3]', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': ( 5, 9), 'unit': 2},
+        {'title': ['ADSR:', ' 1', ' 2', ' 3', '[4]' ], 'target': YMF825_class.OPERATORS,  'range': ( 5, 9), 'unit': 3},
         
-        {'title': ['MODL:', '[1]', ' 2', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': (10,16), 'unit': 0},
-        {'title': ['MODL:', ' 1', '[2]', ' 3', ' 4' ], 'target': 'OPERATORS',  'range': (10,16), 'unit': 1},
-        {'title': ['MODL:', ' 1', ' 2', '[3]', ' 4' ], 'target': 'OPERATORS',  'range': (10,16), 'unit': 2},
-        {'title': ['MODL:', ' 1', ' 2', ' 3', '[4]' ], 'target': 'OPERATORS',  'range': (10,16), 'unit': 3},
+        {'title': ['MODL:', '[1]', ' 2', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': (10,16), 'unit': 0},
+        {'title': ['MODL:', ' 1', '[2]', ' 3', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': (10,16), 'unit': 1},
+        {'title': ['MODL:', ' 1', ' 2', '[3]', ' 4' ], 'target': YMF825_class.OPERATORS,  'range': (10,16), 'unit': 2},
+        {'title': ['MODL:', ' 1', ' 2', ' 3', '[4]' ], 'target': YMF825_class.OPERATORS,  'range': (10,16), 'unit': 3},
         
-        {'title': ['EQLZ:', '[1]', '', '', ''       ], 'target': 'EQUALIZERS', 'range': ( 0, 3), 'unit': 0},
-        {'title': ['EQLZ:', '[2]', '', '', ''       ], 'target': 'EQUALIZERS', 'range': ( 0, 3), 'unit': 1},
-        {'title': ['EQLZ:', '[3]', '', '', ''       ], 'target': 'EQUALIZERS', 'range': ( 0, 3), 'unit': 2},
+        {'title': ['EQLZ:', '[1]', '', '', ''       ], 'target': YMF825_class.EQUALIZERS, 'range': ( 0, 3), 'unit': 0},
+        {'title': ['EQLZ:', '[2]', '', '', ''       ], 'target': YMF825_class.EQUALIZERS, 'range': ( 0, 3), 'unit': 1},
+        {'title': ['EQLZ:', '[3]', '', '', ''       ], 'target': YMF825_class.EQUALIZERS, 'range': ( 0, 3), 'unit': 2},
         
-        {'title': ['SAVE SOUND FILE', '', '', '', ''], 'target': 'SAVE',       'range': ( 0, 4), 'unit': 0},
-        {'title': ['LOAD SOUND FILE', '', '', '', ''], 'target': 'LOAD',       'range': ( 0, 4), 'unit': 0}
+        {'title': ['SAVE SOUND FILE', '', '', '', ''], 'target': YMF825_class.SAVE,       'range': ( 0, 4), 'unit': 0},
+        {'title': ['LOAD SOUND FILE', '', '', '', ''], 'target': YMF825_class.LOAD,       'range': ( 0, 4), 'unit': 0}
     ]
     
     DISPLAY_PAGE_MAX = len(DISPLAY_PAGE_FORMAT)
@@ -1533,7 +1576,7 @@ class Application_class:
             Application_class.DISPLAY_TEXTS[row][col] = ''
             Application_class.DISPLAY_LABELS[row][col].text = Application_class.DISPLAY_TEXTS[row][col]
 
-        algo = YMF825_obj.get_value('GENERAL', 'ALGO')['value']
+        algo = YMF825_obj.get_value(YMF825_class.GENERAL, 'ALGO')['value']
         Application_class.DISPLAY_TEXTS[row][1] = YMF825_class.ALOGOLITHM[algo][row-4]
         Application_class.DISPLAY_LABELS[row][1].text = Application_class.DISPLAY_TEXTS[row][1]
 
@@ -1558,7 +1601,7 @@ class Application_class:
         show_wave_names = False
 
         # GENERAL parameter's page
-        if   target == 'GENERAL':
+        if   target == YMF825_class.GENERAL:
             # Show USB MIDI mode
             Application_class.DISPLAY_TEXTS[0][4] = 'HOST' if MIDI_obj.as_host() else 'DEV'
             Application_class.DISPLAY_LABELS[0][4].text = Application_class.DISPLAY_TEXTS[0][4]
@@ -1591,7 +1634,7 @@ class Application_class:
                     self.show_algorithm_chart(row)                        
 
         # OPERATORS parameter's page
-        elif target == 'OPERATORS':
+        elif target == YMF825_class.OPERATORS:
             # Show each display line
             for row in list(range(1,11)):
                 # Show parameter
@@ -1627,18 +1670,18 @@ class Application_class:
                         if show_wave_names:
                             Application_class.DISPLAY_TEXTS[row][0] = 'wav' + str(row - 5) + ':'
                             Application_class.DISPLAY_LABELS[row][0].text = Application_class.DISPLAY_TEXTS[row][0]
-                            Application_class.DISPLAY_TEXTS[row][1] = YMF825_obj.get_value_to_display('OPERATORS', 'WAVE', row - 6, True)
+                            Application_class.DISPLAY_TEXTS[row][1] = YMF825_obj.get_value_to_display(YMF825_class.OPERATORS, 'WAVE', row - 6, True)
                             Application_class.DISPLAY_LABELS[row][1].text = Application_class.DISPLAY_TEXTS[row][1]
 
                     # Alogorithm line on the bottom
                     elif row == 10:
                         Application_class.DISPLAY_TEXTS[row][0] = 'ALGO:'
                         Application_class.DISPLAY_LABELS[row][0].text = Application_class.DISPLAY_TEXTS[row][0]
-                        Application_class.DISPLAY_TEXTS[row][1] = YMF825_obj.get_value_to_display('GENERAL', 'ALGO')
+                        Application_class.DISPLAY_TEXTS[row][1] = YMF825_obj.get_value_to_display(YMF825_class.GENERAL, 'ALGO')
                         Application_class.DISPLAY_LABELS[row][1].text = Application_class.DISPLAY_TEXTS[row][1]
 
         # EQUALIZERS parameter's page
-        elif target == 'EQUALIZERS':
+        elif target == YMF825_class.EQUALIZERS:
             # Show each display line
             for row in list(range(1,11)):
                 # Show parameter
@@ -1669,8 +1712,8 @@ class Application_class:
                         Application_class.DISPLAY_LABELS[row][col].text = Application_class.DISPLAY_TEXTS[row][col]
 
         # SAVE/LOAD parameter's page
-        elif target == 'SAVE' or target == 'LOAD':
-            if target == 'LOAD':
+        elif target == YMF825_class.SAVE or target == YMF825_class.LOAD:
+            if target == YMF825_class.LOAD:
                 YMF825_obj.find_sound_files()
             
             # Show each display line
@@ -1736,26 +1779,30 @@ class Application_class:
                     YMF825_obj.increment_parameter_value(inc, target, parm_name, parm_unit)
                     self.show_parameter(target, parm_name, parm_unit)
                     
-                    if target == 'GENERAL' or target == 'OPERATORS':
+                    if target == YMF825_class.GENERAL or target == YMF825_class.OPERATORS:
                         operator_edited = True
                         if parm_name == 'ALGO':
                             algorithm_edited = True
 
-                    if target == 'EQUALIZERS' and (parm_name == 'FREQ' or parm_name == 'Qfct'):
+                    if target == YMF825_class.EQUALIZERS and (parm_name == 'FREQ' or parm_name == 'Qfct'):
                         equalizer_edited = True
 
                     # Load bank was changed
-                    if target == 'LOAD' and parm_name == 'BANK':
+                    if target == YMF825_class.LOAD and parm_name == 'BANK':
                         YMF825_obj.find_sound_files()
                         self.show_parameter(target, 'NUM.', 0)
 
+                    # Save bank or number was changed
+                    if target == YMF825_class.SAVE and (parm_name == 'BANK' or parm_name == 'NUM.'):
+                        self.show_parameter(target, 'NUM.', 0)
+ 
                 else:
                     break
                         
             # Next parameter
             parm = parm + 1
 
-        if target == 'GENERAL' or target == 'OPERATORS':
+        if target == YMF825_class.GENERAL or target == YMF825_class.OPERATORS:
             if operator_edited:
                 YMF825_obj.send_edited_sound_param()
             
@@ -1763,21 +1810,22 @@ class Application_class:
                 for row in list(range(4,11)):
                     self.show_algorithm_chart(row)
 
-        elif target == 'EQUALIZERS':
+        elif target == YMF825_class.EQUALIZERS:
             if equalizer_edited:
                 YMF825_obj.send_equalizer_parameters(parm_unit)
             
-        elif target == 'SAVE':
-            parm = YMF825_obj.get_value(target, 'SAVE')
+        elif target == YMF825_class.SAVE:
+            parm = YMF825_obj.get_value(target, YMF825_class.SAVE)
             if parm is not None:
                 if parm['value'] == 2:
                     YMF825_obj.save_parameter_file()
                     parm['value'] = 0
                     sleep(1.0)
-                    self.show_parameter(target, 'SAVE', 0)
+                    self.show_parameter(target, YMF825_class.SAVE, 0)
+                    self.show_parameter(target, 'NUM.', 0)
             
-        elif target == 'LOAD':
-            parm = YMF825_obj.get_value(target, 'LOAD')
+        elif target == YMF825_class.LOAD:
+            parm = YMF825_obj.get_value(target, YMF825_class.LOAD)
             if parm is not None:
                 # Load a file
                 if parm['value'] == 2:
@@ -1789,14 +1837,14 @@ class Application_class:
                             YMF825_obj.send_equalizer_parameters(eqno)
 
                     sleep(1.0)
-                    self.show_parameter(target, 'LOAD', 0)
+                    self.show_parameter(target, YMF825_class.LOAD, 0)
                 
                 # Search files
                 elif parm['value'] == 4:
                     YMF825_obj.find_sound_files()
                     sleep(1.0)
                     parm['value'] = 0
-                    self.show_parameter(target, 'LOAD', 0)
+                    self.show_parameter(target, YMF825_class.LOAD, 0)
                     self.show_parameter(target, 'NUM.', 0)
 
 
@@ -1824,7 +1872,7 @@ if __name__=='__main__':
     YMF825_obj = YMF825_class()
 
     # YMF825 Test Sounds
-    print("Opening melody")
+    print('Opening melody')
     opening_melody = [(67,0.2),(69,0.2),(71,0.2),(72,1.0)]
     for note in opening_melody:
         YMF825_obj.note_on(note[0], 24)
@@ -1832,7 +1880,7 @@ if __name__=='__main__':
         YMF825_obj.note_on(note[0],  0)
 
     # Show the parameter editor top page.
-    print("START async TASKS.")
+    print('START async TASKS.')
     Application.change_page()
 
     #####################################################
