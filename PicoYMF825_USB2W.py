@@ -28,6 +28,9 @@
 #            Algorithm chart.
 #            LED signs for assistancing user.
 #
+#     0.0.4: 04/22/2025
+#            Improve the note off event (Voice unit aging).
+#
 # SPI:: YMF825
 #   SCK: GP18(24)
 #   TX : GP19(25) (MOSI)
@@ -101,7 +104,7 @@ async def get_8encoder():
             on_change = on_change or change
             M5Stack_8Encoder_class.status['on_change']['switch'] = change
             M5Stack_8Encoder_class.status['switch'] = enc_switch
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.02)
             
             for rt in list(range(8)):
                 enc_rotary = Encoder_obj.get_rotary_increment(rt)
@@ -109,7 +112,7 @@ async def get_8encoder():
                 on_change = on_change or change
                 M5Stack_8Encoder_class.status['on_change']['rotary_inc'][rt] = change
                 M5Stack_8Encoder_class.status['rotary_inc'][rt] = enc_rotary
-                await asyncio.sleep(0.01)
+                await asyncio.sleep(0.02)
     
             Encoder_obj.i2c_unlock()
 
@@ -121,7 +124,7 @@ async def get_8encoder():
 
         # Gives away process time to the other tasks.
         # If there is no task, let give back process time to me.
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.02)
 
 ##########################################
 # MIDI IN in async task
@@ -137,7 +140,7 @@ async def midi_in():
 
             elif isinstance(midi_msg, NoteOff):
 #                print('NOTE OFF:', midi_msg.note)
-                YMF825_obj.note_on(midi_msg.note, 0)
+                YMF825_obj.note_off(midi_msg.note)
                 
         # Gives away process time to the other tasks.
         # If there is no task, let give back process time to me.
@@ -216,6 +219,7 @@ class MIDI_class:
 
 #                    self._raw_midi_host = MIDI(device)				# bloking mode
                     self._raw_midi_host = MIDI(device, 0.05)		# none-blocking mode
+#                    self._raw_midi_host = MIDI(device, 0.1)		# none-blocking mode
                     if self._init:
                         print("CONNECT MIDI")
 
@@ -481,7 +485,7 @@ class OLED_SH1107_128x128_class:
 ###################################
 class YMF825_class:
     PARM_TEXT_OFF_ON = ["OFF", "ON "]
-    PARM_TEXT_ALGO = [" 0|<1>*2", " 1|<1>+2", " 2|<1>+2+<3>+4", " 3|(<1>+2*3)*4", " 4|<1>*2*3*4", " 5|<1>*2+<3>*4", " 6|<1>+2*3*4", " 7|<1>+2*3+4"]
+    PARM_TEXT_ALGO = [" 0:<1>*2", " 1:<1>+2", " 2:<1>+2+<3>+4", " 3:(<1>+2*3)*4", " 4:<1>*2*3*4", " 5:<1>*2+<3>*4", " 6:<1>+2*3*4", " 7:<1>+2*3+4"]
     ALOGOLITHM = [
         [	# 0|<1>*2
             '',
@@ -577,10 +581,10 @@ class YMF825_class:
             # Editor Page1
             # name, value_range 0..4-1, text_conversion, data_value
             # param_bytes[ 2]: NOP 000000 | Basic Octave 11
-            {'name': "OCTV", 'max': 4, 'val_conv': None,              'value': 1,             'parm_pos': 0, 'val_mask': 0x03, 'shift': 0, 'mask': 0x00},
+            {'name': "OCTV", 'max': 4, 'val_conv': '{:2d}',              'value': 1,             'parm_pos': 0, 'val_mask': 0x03, 'shift': 0, 'mask': 0x00},
             # param_bytes[ 3]:LFO 11 | NOP 000 | Algorithm 111
             {'name': "ALGO", 'max': 8, 'val_conv': PARM_TEXT_ALGO,    'value': 0,             'parm_pos': 1, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
-            {'name': "LFO ", 'max': 8, 'val_conv': None,              'value': 2,             'parm_pos': 1, 'val_mask': 0x03, 'shift': 6, 'mask': 0x07}
+            {'name': "LFO ", 'max': 8, 'val_conv': '{:2d}',              'value': 2,             'parm_pos': 1, 'val_mask': 0x03, 'shift': 6, 'mask': 0x07}
         ],
         
         # 4 OPERATORs
@@ -595,20 +599,20 @@ class YMF825_class:
             {'name': "FDBK", 'max':  8, 'val_conv': None,             'value': [ 3, 0, 0, 0], 'parm_pos':  8, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
 
             # Editor Page3
-            {'name': "ATCK", 'max': 16, 'val_conv': None,             'value': [10, 7,15,15], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
-            {'name': "DECY", 'max': 16, 'val_conv': None,             'value': [ 0, 3, 3, 3], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': "SUSL", 'max': 16, 'val_conv': None,             'value': [12, 7,12,12], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': "SUSR", 'max': 16, 'val_conv': None,             'value': [ 0, 0, 5, 5], 'parm_pos':  2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
-            {'name': "RELS", 'max': 16, 'val_conv': None,             'value': [ 0, 0, 8, 8], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': "ATCK", 'max': 16, 'val_conv': None,             'value': [14,14,14,14], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': "DECY", 'max': 16, 'val_conv': None,             'value': [ 4, 4, 4, 4], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
+            {'name': "SUSL", 'max': 16, 'val_conv': None,             'value': [12,12,12,12], 'parm_pos':  4, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
+            {'name': "SUSR", 'max': 16, 'val_conv': None,             'value': [ 7, 7, 7, 7], 'parm_pos':  2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': "RELS", 'max': 16, 'val_conv': None,             'value': [ 5, 5, 5, 5], 'parm_pos':  3, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
 
             # Editor Page4
-            {'name': "VIBE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 1, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 0, 'mask': 0xfe},
-            {'name': "VIBD", 'max':  4, 'val_conv': None,             'value': [ 1, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 1, 'mask': 0xf1},
-            {'name': "AMPE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 1, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 4, 'mask': 0xef},
+            {'name': "VIBE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 0, 'mask': 0xfe},
+            {'name': "VIBD", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 1, 'mask': 0xf1},
+            {'name': "AMPE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x01, 'shift': 4, 'mask': 0xef},
             {'name': "AMPM", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  6, 'val_mask': 0x07, 'shift': 5, 'mask': 0x1f},
             {'name': "KYSE", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 0, 0, 0], 'parm_pos':  5, 'val_mask': 0x03, 'shift': 0, 'mask': 0xfc},
             {'name': "KSLV", 'max':  4, 'val_conv': None,             'value': [ 0, 0, 0, 0], 'parm_pos':  2, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
-            {'name': "IGOF", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 0, 1, 0, 0], 'parm_pos':  2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
+            {'name': "IGOF", 'max':  2, 'val_conv': PARM_TEXT_OFF_ON, 'value': [ 1, 1, 1, 1], 'parm_pos':  2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
         ],
         
         'EQUALIZERS': [
@@ -654,7 +658,8 @@ class YMF825_class:
         self._spi = busio.SPI(spi_clock, MOSI=spi_mosi, MISO=spi_miso)			# board.SPI does NOT work for PICO, use busio.SPI
         self.spi_lock()
 #        self._spi.configure(baudrate = 1000000, polarity = 0, phase = 0, bits = 8) 
-        self._spi.configure(baudrate = 7000000, polarity = 0, phase = 0, bits = 8) 
+#        self._spi.configure(baudrate = 7000000, polarity = 0, phase = 0, bits = 8) 
+        self._spi.configure(baudrate = 10000000, polarity = 0, phase = 0, bits = 8) 
         self.spi_unlock()
 
         # Setup YMF825
@@ -769,7 +774,7 @@ class YMF825_class:
                         
                     break
 
-        print('DISP:', target, parameter, val, frm)
+#        print('DISP:', target, parameter, val, frm)
         if val is not None:
             # Wave name
             if parameter == 'WAVE':
@@ -1083,7 +1088,13 @@ class YMF825_class:
                 data_mask  = param['mask']
                 sound_param[byte_order] = (sound_param[byte_order] & data_mask) | ((val & self_mask) << shift_left)
 
-        print('PARAM:', sound_param)
+        # DEBUG: show parameters
+#        print('PARAM:', hex(sound_param[0]), hex(sound_param[0]))
+#        for op in list(range(4)):
+#            bt = op * 7 + 2
+#            print('  OP' + str(op) + ':', hex(sound_param[bt]), hex(sound_param[bt+1]), hex(sound_param[bt+2]), hex(sound_param[bt+3]), hex(sound_param[bt+4]), hex(sound_param[bt+5]), hex(sound_param[bt+6]))
+
+        # Send sound parameters to YMF825
         self.send_parameters(sound_param)
         return
 
@@ -1152,49 +1163,84 @@ class YMF825_class:
         self.spi_write_byte(0x13,0x00)
         sleep(0.2)
 
-    def get_voice(self, notenum):
-        ### Vacant voice assignment (ideal) ###
+    def get_voice(self, notenum, note_on = True):
+        # Vacant voice
+#        print('GET VOICE:', notenum, note_on)
+        voice = -1
+        if note_on:
+            voice = self._voice_note.index(None) if None in self._voice_note else -1
+
+        # Same voice has been used
+        off_voice = -1
         if notenum in self._voice_note:
-            voice = self._voice_note.index(notenum)
-            self._note_on(voice, YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], 0)
-            self._voice_note[voice] = None
-            self._voice_duration[voice] = -1
+            # Send note it off
+            off_voice = self._voice_note.index(notenum)
+            self._note_on(off_voice, YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], 0)
+
+            # Aging voice flag (-1)
+            self._voice_note[off_voice] = -1
+            self._voice_duration[off_voice] = 0
+#            print('  --->OFF  VOICE:', off_voice, notenum)
+            
+        if not note_on:
+#            print('<---NOTE OFF:', self._voice_note)
+            return off_voice
+
+        # Return the vacant voice
+        if voice >= 0:
+#            print('<---VAC VOICE:', voice)
             return voice
         
-        elif None in self._voice_note:
-            voice = self._voice_note.index(None)
-            return voice
-        
-        voice = 0
+        # Find a voice having the maximum duration
         max_dur = -10
         for v in list(range(len(self._voice_note))):
-            dur = self._voice_duration[v]
-            if dur > max_dur:
-                voice = v
+            if self._voice_note[v] is not None:
+                # Get the maximun duration voice in used voices
+                dur = self._voice_duration[v]
+                if dur > max_dur:
+                    voice = v
+                    max_dur = dur
                 
-            self._voice_duration[v] = self._voice_duration[v] + 1
-        
-        notenum = self._voice_note[voice]
-        self._note_on(voice, YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], 0)
+                # Increment duration
+                self._voice_duration[v] = self._voice_duration[v] + 1
+
+        # Use an aging_voice if used voice is not available
+#        print('MAX DURATION=', voice, self._voice_duration[voice], self._voice_note)
+        if self._voice_note[voice] >= 0:
+            # Note off the maximum duration note
+            note = self._voice_note[voice]
+            self._note_on(voice, YMF825_class.NOTENUM_HI[note], YMF825_class.NOTENUM_LO[note], 0)
+
+        # Return maximum duration voice
         self._voice_note[voice] = None
         self._voice_duration[voice] = -1
+#        print('<---MAX VOICE:', voice)
         return voice
 
+    # voice: Voice number in YMF825 (0..15)
     # Note on with native values
     #   fnumh, fnuml:: 2byte data to play, byte data for a note is in notenum_hi[note] and notenum_lo[note]
     # Note on (play a note).
     # NOTICE:: Never call this directory, use play_by_scale() or play_by_timbre_scale().
     #   fnumh, fnuml:: 2byte data to play, byte data for a note is in notenum_hi[note] and notenum_lo[note].
     def _note_on(self, voice, notenum_h, notenum_l, velocity = 0x1c):
-#        print("NOTE ON VOLUME =", str(volume))
+#        print("_NOTE:", 'OFF' if velocity == 0 else 'ON ', voice, notenum_h, notenum_l, velocity)
         # Send note on to YMF825
-        self.spi_write_byte( 0x0B, voice & 0x0f )
-        self.spi_write_byte( 0x0C, velocity & 0x7c )
-        self.spi_write_byte( 0x0D, notenum_h )
-        self.spi_write_byte( 0x0E, notenum_l )
-        self.spi_write_byte( 0x0F, 0x40 | (voice&0x0f) )
+        # 0x40=Note ON / 0x00=Note OFF: b0NMEVVVV (N=Note ON/OFF, M=Mute, E=EG_REST, V=Voice)
+        
+        # Note ON
+        if velocity != 0:
+            self.spi_write_byte(0x0B, voice & 0x0f)
+            self.spi_write_byte(0x0C, velocity & 0x7c)
+            self.spi_write_byte(0x0D, notenum_h)
+            self.spi_write_byte(0x0E, notenum_l)
+            self.spi_write_byte(0x0F, 0x40 | (voice&0x0f))
 
-    # Note on with MIDI note number (0..127)
+        # Note OFF
+        else:
+            self.spi_write_byte(0x0F, voice&0x0f)
+
+    # Note ON in vacant voice with MIDI note number (0..127)
     def note_on(self, notenum, velocity=0x1c):
         if velocity == 0:
             self.note_off(notenum)
@@ -1203,20 +1249,21 @@ class YMF825_class:
         voice = self.get_voice(notenum)
         if voice >= 0:
             notenum = notenum % 127
-            self._note_on(self.get_voice(notenum), YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], velocity & 0x7c)
+#            self._note_on(self.get_voice(notenum), YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], velocity & 0x7c)
+            self._note_on(voice, YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], velocity & 0x7c)
             self._voice_note[voice] = notenum
             self._voice_duration[voice] = 0
+#            print('<---NOTE ON:', self._voice_note)
+            
+#        else:
+#            print('===NO VACANT VOICE==:', notenum, velocity)
 #            print('NOTE ON:', notenum, velocity, '@', voice)
 #            print('NOTE ON:', notenum, velocity, '@', voice, self._voice_note, self._voice_duration)
-            
+    
+    # Note OFF with MIDI note number (0..127)
     def note_off(self, notenum):
-        voice = self.get_voice(notenum)
-        if voice >= 0:
-            self._note_on(voice, YMF825_class.NOTENUM_HI[notenum], YMF825_class.NOTENUM_LO[notenum], 0)
-            self._voice_note[voice] = None
-            self._voice_duration[voice] = -1
-#            print('NOTE OFF:', notenum, '@', voice)
-#            print('NOTE OFF:', notenum, '@', voice, self._voice_note, self._voice_duration)
+        # Find the note and note it off (if available)
+        self.get_voice(notenum, False)
 
     #Note off
     #  Turn off the note playing
@@ -1676,6 +1723,7 @@ class Application_class:
 
         # Editor control
         algorithm_edited = False
+        operator_edited  = False
         equalizer_edited = False
         for rotary in list(range(7)):
             if M5Stack_8Encoder_class.status['on_change']['rotary_inc'][rotary]:
@@ -1688,8 +1736,10 @@ class Application_class:
                     YMF825_obj.increment_parameter_value(inc, target, parm_name, parm_unit)
                     self.show_parameter(target, parm_name, parm_unit)
                     
-                    if target == 'GENERAL' and parm_name == 'ALGO':
-                        algorithm_edited = True
+                    if target == 'GENERAL' or target == 'OPERATORS':
+                        operator_edited = True
+                        if parm_name == 'ALGO':
+                            algorithm_edited = True
 
                     if target == 'EQUALIZERS' and (parm_name == 'FREQ' or parm_name == 'Qfct'):
                         equalizer_edited = True
@@ -1706,7 +1756,8 @@ class Application_class:
             parm = parm + 1
 
         if target == 'GENERAL' or target == 'OPERATORS':
-            YMF825_obj.send_edited_sound_param()
+            if operator_edited:
+                YMF825_obj.send_edited_sound_param()
             
             if algorithm_edited:
                 for row in list(range(4,11)):
