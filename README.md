@@ -18,7 +18,7 @@ Pico YMF825 USB MIDI Overview:
 PICO2W is programmed with circuit python.  
 
 # User's Manual
-[User's Manual in Japanese is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual.md)  
+[User's Manual in Japanese is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual_Jp.md)  
 [User's Manual in English is under construction.]()  
 
 # Software Installation
