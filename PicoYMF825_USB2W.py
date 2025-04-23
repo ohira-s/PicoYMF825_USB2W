@@ -593,7 +593,7 @@ class YMF825_class:
         'SAW(t)',     'plus(SAW(t))', 'abs(SAW(t))',  'abs(comp(SAW(t)))',
         'SAW(2t)',   'abs(SAW(2t))', 'SQUARE(t)/4', '---'
     ]
-    PARM_TEXT_EQTYPE = ['ALL PASS', 'LPF', 'HPF', 'BPF:skart', 'BPF:0db', 'NOTCH']
+    PARM_TEXT_EQTYPE = ['ALL PASS', 'LPF', 'HPF', 'BPF:skirt', 'BPF:0db', 'NOTCH']
     PARM_TEXT_SAVE = ['----', 'Save?', PARAMETER['Save Sound'], 'Save?']
     PARM_TEXT_LOAD = ['----', 'Load?', PARAMETER['Load Sound'], 'Load?', 'SEARCH', 'Search?']
     PARM_TEXT_CURSOR_F = ['^', ' ^', '   ^', '    ^', '     ^', '      ^']
@@ -1328,7 +1328,7 @@ class YMF825_class:
             b1 = -(1.0 + cosw0) / a0
             b2 = b0
             
-        elif filter_name == 'BPF:skart':
+        elif filter_name == 'BPF:skirt':
             b0 = q_factor * alpha / a0
             b1 = 0
             b2 = -b0
