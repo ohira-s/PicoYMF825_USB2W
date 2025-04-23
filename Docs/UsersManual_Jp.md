@@ -47,8 +47,10 @@
 5) Pico YMF825 USB MIDIのUSB OTGケーブルの電源供給用USBケーブルをACアダプタに接続します。  
 6) USBケーブルで電源が供給されると、Pico YMF825 USB MIDIが起動してOLED画面に「**PICO YMF825 USB SYN.**」で始まるスプラッシュ画面が表示されます。  
 7) OLED画面が「**YMF825 GENERAL HOST**」という演奏用画面になると演奏できます。  
+8) ホストモードでは、ロータリーエンコーダーの一番右のLEDが青色に光ります。  
 
 ※ Raspberry Pi PICO2WのUSBポートに機器を接続してはいけません。  
+※ USBホスト検索中は、ロータリーエンコーダーの一番右のLEDが赤色に光ります。   
 ![Host Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_general.jpg)  
 
 ## 5. USB MIDIデバイスモードでの接続〜起動
@@ -58,6 +60,7 @@
 4) Pico YMF825 USB MIDIのRapsberry Pi PICOのUSBコネクタとMIDI音源をUSBケーブルで接続します。  
 5) MIDI音源の電源を入れます。MIDI音源からUSBケーブルで電源が供給されると、Pico YMF825 USB MIDIが起動してOLED画面に「**PICO YMF825 USB SYN.**」と表示されます。  
 6) OLED画面が「**YMF825 GENERAL DEV**」という演奏用画面になると演奏できます。  
+7) デバイスモードでは、ロータリーエンコーダーの一番右のLEDが紫色に光ります。  
 　
 ※ USB OTGケーブルの電源側USBに電源を供給してはいけません。  
 ![Device Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_device_mode.jpg)  
