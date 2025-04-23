@@ -1,6 +1,6 @@
 # Pico YMF825 USB MIDI User's Manual
 
-![PICO YMF825 Overview](https://github.com/ohira-s/PicoGuitarDrum2Web/blob/master/Docs/pico_ymf825_overview.jpg)
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
 ## 1. 機能
 　Pico YMF825 USB MIDIはUSB MIDIデバイスとして動作するYMF825シンセサイザーです。YMF825は以下の仕様のシンセサイザーボードです。  
 
@@ -11,7 +11,7 @@
 * SPI通信制御
 
 ## 2. 外観
-![PICO YMF825 Overview](https://github.com/ohira-s/PicoGuitarDrum2Web/blob/master/Docs/pico_ymf825_overview.jpg)
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
 
 1) ロータリーエンコーダーR1〜R8  
 
