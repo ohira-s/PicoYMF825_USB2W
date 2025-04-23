@@ -1,6 +1,6 @@
 # Pico YMF825 USB MIDI User's Manual
 
-![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/splash.jpg)
 ## 1. 機能
 　Pico YMF825 USB MIDIはUSB MIDIデバイスとして動作するYMF825シンセサイザーです。YMF825は以下の仕様のシンセサイザーボードです。  
 
@@ -14,6 +14,7 @@
 ![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
 
 1) ロータリーエンコーダーR1〜R8  
+![8 Rotary Encoders](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/encoder_host.jpg)  
 
 	8個のロータリーエンコーダー（R1〜R8）で音色の編集とデータセーブ／ロードを行います。  
 	ロータリーエンコーターを右に回すと値は大きくなり、左に回すと小さくなります。  
@@ -23,6 +24,7 @@
 	ロータリーエンコーダーの右側にあるスライドスイッチで、USB MIDIのホストモードで動作させるか、デバイスモードで動作させるかを選択します（起動時のみ有効）  
 	
 3) OLEDディスプレイ  
+![OLED Display](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_general.jpg)  
 
 	各種情報を表示します。  
 	
@@ -47,6 +49,7 @@
 7) OLED画面が「**YMF825 GENERAL HOST**」という演奏用画面になると演奏できます。  
 
 ※ Raspberry Pi PICO2WのUSBポートに機器を接続してはいけません。  
+![Host Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_general.jpg)  
 
 ## 5. USB MIDIデバイスモードでの接続〜起動
 1) Pico YMF825 USB MIDI（本機）を用意します。  
@@ -57,9 +60,11 @@
 6) OLED画面が「**YMF825 GENERAL DEV**」という演奏用画面になると演奏できます。  
 　
 ※ USB OTGケーブルの電源側USBに電源を供給してはいけません。  
+![Device Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_device_mode.jpg)  
 
 ## 6. 音色全体設定画面
 　起動直後は音色全体設定画面になっています。この画面ではYMF825の音色の全体に影響するパラメータを設定できます。  
+![General Parameters](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_general.jpg)  
 
 ### 5-1. OLED画面
 　OLED画面は以下のようになっています。  
@@ -154,6 +159,7 @@
 
 ## 6. オシレーター設定画面
 　この画面ではYMF825の4つのオペレーターの発振器のパラメータを設定できます。  
+![Oscillator Parameters](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_oscillator1.jpg)  
 
 ### 6-1. OLED画面
 　OLED画面は以下のようになっています。  
@@ -187,6 +193,7 @@
 
 	画面には4つのオペレーターの設定値がまとめて表示されていますが、編集できるのはひとつのオペレーターだけです。OSCL欄で[]で囲まれた番号のオペレーターが編集対象です。  
 	編集対象のオペレーターを変更するには、ロータリーエンコーダーのR8を回して選択します。オペレーター2の場合は以下のようになります。  
+![Operator2](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_oscillator2.jpg)  
 
 |OSCL|1|[2]|3|4|
 |----|-----|-----|----|----|
@@ -286,6 +293,7 @@
 
 ## 7. エンベロープ設定画面
 　この画面ではYMF825の4つのオペレーターの発振器のADSSRエンベロープパラメータを設定できます。  
+![Envelope Parameters](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_adssr.jpg)  
 
 ### 7-1. OLED画面
 　OLED画面は以下のようになっています。  
@@ -373,6 +381,7 @@
 
 ## 8. モジュレーション設定画面
 　この画面ではYMF825の4つのオペレーターの発振器のADSSRエンベロープパラメータを設定できます。  
+![Modulation Parameters](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_modulation.jpg)  
 
 ### 8-1. OLED画面
 　OLED画面は以下のようになっています。  
@@ -477,6 +486,7 @@
 ## 9. イコライザー設定画面
 　この画面ではYMF825の3つのイコライザーのパラメータを設定できます。  
 　3つのイコライザーは直列に接続されています。
+![Equalizer Parameters](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_equalizer1.jpg)  
 
 ### 9-1. OLED画面
 　OLED画面は以下のようになっています。  
@@ -490,6 +500,7 @@
 
 	1画面には4つのイコライザーの設定値が表示されています。  
 	編集対象のオペレーターを変更するには、ロータリーエンコーダーのR8を回して選択します。イコライザー2の場合は以下のようになります。  
+![Equalizer2](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_equalizer2.jpg)  
 
 |EQLZ|[2]|
 |----|-----|
@@ -532,6 +543,7 @@
 
 ### 10-1. OLED画面
 　OLED画面は以下のようになっています。  
+![Save Sound](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/save_sound.jpg)  
 
 |SAVE|SOUND FILE|
 |----|-----|
@@ -591,6 +603,7 @@
 
 ### 11-1. OLED画面
 　OLED画面は以下のようになっています。  
+![Load Sound](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/load_sound.jpg)  
 
 |LOAD|SOUND FILE|
 |----|-----|
