@@ -53,6 +53,9 @@
 ※ USBホスト検索中は、ロータリーエンコーダーの一番右のLEDが赤色に光ります。   
 ![Host Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/edit_general.jpg)  
 
+自作のUSB MIDI Guitar & Drumと接続した例。  
+![Host Mode](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825_PicoGuitar.jpg)  
+
 ## 5. USB MIDIデバイスモードでの接続〜起動
 1) Pico YMF825 USB MIDI（本機）を用意します。  
 2) USBホストとなるUSB MIDI音源（パソコンなど）を用意します。  
