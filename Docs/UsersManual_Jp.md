@@ -11,7 +11,7 @@
 * SPI通信制御
 
 ## 2. 外観
-![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825_PKG_Overview.jpg)
 
 1) ロータリーエンコーダーR1〜R8  
 ![8 Rotary Encoders](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/encoder_host.jpg)  

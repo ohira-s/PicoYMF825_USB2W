@@ -11,16 +11,22 @@ Pico YMF825 USB MIDIは音色エディターとMIDI INの機能を持ってい�
 * USBホストモードでは、MIDIキーボードのようなコントローラーを接続して演奏できます。
 * USBデバイスモードでは、DAWアプリが動くPCなどを接続してシーケンサーでの演奏などができます。   
 
-Pico YMF825 USB MIDI外観（ケース格納前）:  
+Pico YMF825 USB MIDI外観:  
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825_PKG_Overview.jpg)  
+
+Pico YMF825 USB MIDI内部部品:  
 ![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
 
 PICO2Wはcircuit pythonでプログラムされています。  
 
-# User's Manual
+# ユーザーズマニュアル
 [日本語版はこちら](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual_Jp.md)  
 [User's Manual in English is under construction.]()  
 
-# Software Installation
+# 回路図
+[Schematics is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825USB_sch.pdf)  
+
+# インストール
 1) circuitpython (v9.2.1)をPICO2Wにコピーします。  
 2) 以下のファイルをPICO2Wのルートにコピーします。  
 

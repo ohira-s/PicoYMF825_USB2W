@@ -13,6 +13,9 @@ This device works as a USB host or a USB device.
 * As a USB device, you can connect this device to a PC which any DAW application is working.  
 
 Pico YMF825 USB MIDI Overview:  
+![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825_PKG_Overview.jpg)  
+
+Pico YMF825 USB MIDI Compornents:  
 ![PICO YMF825 Overview](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/pico_ymf825_overview.jpg)
 
 PICO2W is programmed with circuit python.  
@@ -20,6 +23,9 @@ PICO2W is programmed with circuit python.
 # User's Manual
 [User's Manual in Japanese is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual_Jp.md)  
 [User's Manual in English is under construction.]()  
+
+# Schematics
+[Schematics is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825USB_sch.pdf)  
 
 # Software Installation
 1) Copy circuitpython (v9.2.1) into PICO2W.  
