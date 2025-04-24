@@ -21,7 +21,7 @@ PICO2Wはcircuit pythonでプログラムされています。
 
 # ユーザーズマニュアル
 [日本語版はこちら](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual_Jp.md)  
-[User's Manual in English is under construction.]()  
+[User's Manual in English is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/UsersManual.md)  
 
 # 回路図
 [Schematics is here.](https://github.com/ohira-s/PicoYMF825_USB2W/blob/master/Docs/PicoYMF825USB_sch.pdf)  
