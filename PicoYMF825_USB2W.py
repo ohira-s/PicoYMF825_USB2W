@@ -34,6 +34,9 @@
 #     0.0.5: 04/24/2025
 #            USB MIDI Device Mode is available.
 #
+#     0.0.6: 04/25/2025
+#            Improve the save process.
+#
 # SPI:: YMF825
 #   SCK: GP18(24)
 #   TX : GP19(25) (MOSI)
@@ -48,8 +51,8 @@
 #   SCL: GP9(12)
 #
 # I2C Unit-1:: 8Encoder (I2C Address = 0x41)
-#   SDA: GP6( 9)
-#   SCL: GP7(10)
+#   SDA: GP6( 9)  - Pull up is needed.
+#   SCL: GP7(10)  - Pull up is needed.
 #
 # OLED SH1107 128x128
 #   21 chars x 11 lines
@@ -499,7 +502,7 @@ class YMF825_class:
         "Octave": "OCTV",			"Algorithm": "ALGO",		"LFO": "LFO ",
         "Wave Shape": "WAVE",		"MCM Frequency": "FREQ",	"Detune": "DETU",
         "Output Level": "LEVL",		"Feedback Level": "FDBK",
-        "Attack": "ATCK",			"Decay": "DECY",			"Sustain Level": "SUSL",				"Sustain Release": "SUSR",				"Release": "RELS",
+        "Attack": "ATCK",			"Decay": "DECY",			"Sustain Level": "SUSL",				"Sustain Rate": "SUSR",				"Release": "RELS",
         "Vibrate Enable": "VIBE",	"Vibrate Depth": "VIBD",	"Amplitude Modulation Enable": "AMPE",	"Amplitude Modulation Depth": "AMPM",
         "Key Sence Enable": "KYSE",	"Key Sence Level": "KSLV",	"Ignore Key Off": "IGOF",
         "Equalizer Type": "TYPE",	"Cutoff Frequency": "FREQ",	"Q Factor": "Qfct",						"Cursor": "<-->",
@@ -597,7 +600,7 @@ class YMF825_class:
     PARM_TEXT_SAVE = ['----', 'Save?', PARAMETER['Save Sound'], 'Save?']
     PARM_TEXT_LOAD = ['----', 'Load?', PARAMETER['Load Sound'], 'Load?', 'SEARCH', 'Search?']
     PARM_TEXT_CURSOR_F = ['^', ' ^', '   ^', '    ^', '     ^', '      ^']
-    PARM_TEXT_CURSOR_T = ['^', ' ^', '  ^', '   ^', '    ^', '     ^', '      ^', '       ^']
+    PARM_TEXT_CURSOR_T = ['^', ' ^', '  ^', '   ^', '    ^', '     ^', '      ^', '       ^', '        ^', '         ^', '          ^', '           ^']
     
     YMF825_PARM = {
         GENERAL: [
@@ -622,7 +625,7 @@ class YMF825_class:
             {'name': PARAMETER['Attack'],                      'max': 16, 'val_conv': None,                 'value': [14,14,14,14],         'parm_pos': 4, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
             {'name': PARAMETER['Decay'],                       'max': 16, 'val_conv': None,                 'value': [ 4, 4, 4, 4],         'parm_pos': 3, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
             {'name': PARAMETER['Sustain Level'],               'max': 16, 'val_conv': None,                 'value': [12,12,12,12],         'parm_pos': 4, 'val_mask': 0x0f, 'shift': 0, 'mask': 0xf0},
-            {'name': PARAMETER['Sustain Release'],             'max': 16, 'val_conv': None,                 'value': [ 7, 7, 7, 7],         'parm_pos': 2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
+            {'name': PARAMETER['Sustain Rate'],                'max': 16, 'val_conv': None,                 'value': [ 7, 7, 7, 7],         'parm_pos': 2, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
             {'name': PARAMETER['Release'],                     'max': 16, 'val_conv': None,                 'value': [ 5, 5, 5, 5],         'parm_pos': 3, 'val_mask': 0x0f, 'shift': 4, 'mask': 0x0f},
 
             # Editor Page4
@@ -632,7 +635,7 @@ class YMF825_class:
             {'name': PARAMETER['Amplitude Modulation Depth'],  'max':  4, 'val_conv': None,                 'value': [ 0, 0, 0, 0],         'parm_pos': 6, 'val_mask': 0x07, 'shift': 5, 'mask': 0x1f},
             {'name': PARAMETER['Key Sence Enable'],            'max':  2, 'val_conv': PARM_TEXT_OFF_ON,     'value': [ 0, 0, 0, 0],         'parm_pos': 5, 'val_mask': 0x03, 'shift': 0, 'mask': 0xfc},
             {'name': PARAMETER['Key Sence Level'],             'max':  4, 'val_conv': None,                 'value': [ 0, 0, 0, 0],         'parm_pos': 2, 'val_mask': 0x07, 'shift': 0, 'mask': 0xf8},
-            {'name': PARAMETER['Ignore Key Off'],              'max':  2, 'val_conv': PARM_TEXT_OFF_ON,     'value': [ 1, 1, 1, 1],         'parm_pos': 2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
+            {'name': PARAMETER['Ignore Key Off'],              'max':  2, 'val_conv': PARM_TEXT_OFF_ON,     'value': [ 0, 0, 0, 0],         'parm_pos': 2, 'val_mask': 0x01, 'shift': 3, 'mask': 0xf7}
         ],
         
         EQUALIZERS: [
@@ -643,19 +646,19 @@ class YMF825_class:
         ],
         
         SAVE: [
-            {'name': PARAMETER['Sound Bank'],                  'max':   10, 'val_conv': '{:3d}',            'value':          9,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Sound Number'],                'max': 1000, 'val_conv': '{:03d}:{:s}',      'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Sound Name'],                  'max':    8, 'val_conv': '{:s}',             'value': '        ',            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Cursor'],                      'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Save Sound'],                  'max':    4, 'val_conv': PARM_TEXT_SAVE,     'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
+            {'name': PARAMETER['Sound Bank'],                  'max':   10, 'val_conv': '{:3d}',            'value':              9,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Sound Number'],                'max': 1000, 'val_conv': '{:03d}:{:s}',      'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Sound Name'],                  'max':    8, 'val_conv': '{:12s}',           'value': '            ',        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Cursor'],                      'max':   12, 'val_conv': PARM_TEXT_CURSOR_T, 'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Save Sound'],                  'max':    4, 'val_conv': PARM_TEXT_SAVE,     'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
         ],
         
         LOAD: [
-            {'name': PARAMETER['Sound Bank'],                  'max':   10, 'val_conv': '{:3d}',            'value':          9,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Sound Number'],                'max': 1000, 'val_conv': '{:s}',             'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Sound Name'],                  'max':    8, 'val_conv': '{:s}',             'value': '        ',            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Cursor'],                      'max':    8, 'val_conv': PARM_TEXT_CURSOR_T, 'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
-            {'name': PARAMETER['Load Sound'],                  'max':    6, 'val_conv': PARM_TEXT_LOAD,     'value':          0,            'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
+            {'name': PARAMETER['Sound Bank'],                  'max':   10, 'val_conv': '{:3d}',            'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Sound Number'],                'max': 1000, 'val_conv': '{:12s}',           'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Sound Name'],                  'max':    8, 'val_conv': '{:s}',             'value': '            ',        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Cursor'],                      'max':   12, 'val_conv': PARM_TEXT_CURSOR_T, 'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00},
+            {'name': PARAMETER['Load Sound'],                  'max':    6, 'val_conv': PARM_TEXT_LOAD,     'value':              0,        'parm_pos': 0, 'val_mask': 0x00, 'shift': 0, 'mask': 0x00}
         ]
     }
 
@@ -799,7 +802,7 @@ class YMF825_class:
                         
                     break
 
-#        print('DISP:', target, parameter, val, frm)
+        print('DISP:', target, parameter, val, frm)
         if val is not None:
             # Wave name
             if parameter == YMF825_class.PARAMETER['Wave Shape']:
@@ -1032,7 +1035,7 @@ class YMF825_class:
         except:
             pass
         
-        return sound_name
+        return '{:12s}'.format(sound_name)
 
     # Find sound files in the current bank and search name
     def find_sound_files(self):
@@ -1806,13 +1809,13 @@ class Application_class:
                 YMF825_obj.send_equalizer_parameters(parm_unit)
             
         elif target == YMF825_class.SAVE:
-            parm = YMF825_obj.get_value(target, YMF825_class.SAVE)
+            parm = YMF825_obj.get_value(target, YMF825_class.PARAMETER['Save Sound'])
             if parm is not None:
                 if parm['value'] == 2:
                     YMF825_obj.save_parameter_file()
                     parm['value'] = 0
                     sleep(1.0)
-                    self.show_parameter(target, YMF825_class.SAVE, 0)
+                    self.show_parameter(target, YMF825_class.PARAMETER['Save Sound'], 0)
                     self.show_parameter(target, YMF825_class.PARAMETER['Sound Number'], 0)
             
         elif target == YMF825_class.LOAD:
@@ -1827,8 +1830,25 @@ class Application_class:
                         for eqno in list(range(3)):
                             YMF825_obj.send_equalizer_parameters(eqno)
 
+                    # Set loaded file to the save parameters
+                    loaded = YMF825_obj.get_value(YMF825_class.LOAD, YMF825_class.PARAMETER['Sound Bank'])
+                    save   = YMF825_obj.get_value(YMF825_class.SAVE, YMF825_class.PARAMETER['Sound Bank'])
+                    bank = loaded['value']
+                    save['value'] = bank
+
+                    loaded = YMF825_obj.get_value(YMF825_class.LOAD, YMF825_class.PARAMETER['Sound Number'])
+                    save   = YMF825_obj.get_value(YMF825_class.SAVE, YMF825_class.PARAMETER['Sound Number'])
+                    number = loaded['value']
+                    save['value'] = number
+
+                    save   = YMF825_obj.get_value(YMF825_class.SAVE, YMF825_class.PARAMETER['Sound Name'])
+                    save['value'] = YMF825_obj.get_sound_name_of_file(bank, number)
+
                     sleep(1.0)
-                    self.show_parameter(target, YMF825_class.LOAD, 0)
+                    self.show_parameter(target, YMF825_class.PARAMETER['Load Sound'], 0)
+                    self.show_parameter(YMF825_class.LOAD, YMF825_class.PARAMETER['Sound Bank'], 0)
+                    self.show_parameter(YMF825_class.LOAD, YMF825_class.PARAMETER['Sound Number'], 0)
+                    self.show_parameter(YMF825_class.LOAD, YMF825_class.PARAMETER['Sound Bank'], 0)
                 
                 # Search files
                 elif parm['value'] == 4:
@@ -1836,7 +1856,7 @@ class Application_class:
                     sleep(1.0)
                     parm['value'] = 0
                     self.show_parameter(target, YMF825_class.LOAD, 0)
-                    self.show_parameter(target, YMF825_class.PARAMETER['Sound Number'], 0)
+                    self.show_parameter(target, YMF825_class.PARAMETER['Sound Name'], 0)
 
 
 #########################
