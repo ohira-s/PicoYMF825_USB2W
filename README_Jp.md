@@ -36,3 +36,6 @@ PICO2Wはcircuit pythonでプログラムされています。
 
 - libフォルダー  
 - SYNTHフォルダー  
+
+# ブログ
+[Blog](https://www.thymes-square.net/?p=725)

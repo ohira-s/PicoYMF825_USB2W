@@ -37,3 +37,6 @@ PICO2W is programmed with circuit python.
 
 - lib folder.  
 - SYNTH folder.  
+
+# Blog
+[Blog: Only in Japanese.](https://www.thymes-square.net/?p=725)
